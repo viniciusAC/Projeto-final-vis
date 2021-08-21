@@ -84,6 +84,10 @@
       .elasticY(true)
       .centerBar(true)
       .renderHorizontalGridLines(true)
+      .on("filtered", function(chart,filter){
+        setar_mapa()
+        update_bar_chart()
+      });
     
     //Gráfico de Linhas de óbitos por dia
     lineChart.width(width)
@@ -126,6 +130,10 @@
         chart.selectAll('text.pie-slice').text(function(d) {
           return dc.utils.printSingleValue((d.endAngle - d.startAngle) /   (2*Math.PI) * 100) + '%';
         })
+      })
+      .on("filtered", function(chart,filter){
+        setar_mapa()
+        update_bar_chart()
       });
     
     //Gráfico de Setor de Óbitos por Idade
@@ -141,7 +149,20 @@
         chart.selectAll('text.pie-slice').text(function(d) {
           return dc.utils.printSingleValue((d.endAngle - d.startAngle) / (2*Math.PI) * 100) + '%';
         })
+      })
+      .on("filtered", function(chart,filter){
+        setar_mapa()
+        update_bar_chart()
       });
+
+    function update_bar_chart() {
+      bairros = death_by_bairro.top(5).map(d => d.key)
+      x_bairro_scale = d3.scaleOrdinal().domain(bairros)
+      barChart.x(x_bairro_scale)
+      cases_bairros = cases_by_bairro.top(5).map(d => d.key)
+      x_bairro_scale2 = d3.scaleOrdinal().domain(cases_bairros)
+      barChart2.x(x_bairro_scale2)
+    }
     
     //Gráfico de Barras de Bairros com maior número de mortes
     let bairroDim = facts.dimension(d => d.bairro).filter(function(d) { return d != "Indeterminado"; })
@@ -183,24 +204,36 @@
     dc.renderAll()
   }  
 
+  async function setar_mapa() {
+    death_by_bairro_map = bairroDim.group().reduceSum(d => d.obitos).top(Infinity)
+    deathsByName = transform_dict(death_by_bairro_map)
+    bairros_info = await set_bairros_info()
+    buildMap()
+  }
+
+  async function set_bairros_info() {
+    x = await d3.csv("/base_de_dados/dados_bairros.csv").then(function(data) {
+      let bairrosMap = new Map()
+      data.forEach(function(d) {
+        if (d["populaçao em 2020"] < 1){
+          bairrosMap.set(d.Bairros, 0)
+        }
+        else{
+          bairrosMap.set(d.Bairros,+Math.trunc((deathsByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
+        }       
+      })
+      return bairrosMap
+    })
+    return x
+  }
 
  // MAPA
   death_by_bairro_map = bairroDim.group().reduceSum(d => d.obitos).top(Infinity)
   let deathsByName = transform_dict(death_by_bairro_map)
-  bairros_info = await d3.csv("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/dados_bairros.csv").then(function(data) {
-    let bairrosMap = new Map()
-    data.forEach(function(d) {
-      if (d["populaçao em 2020"] < 1){
-        bairrosMap.set(d.Bairros, 0)
-      }
-      else{
-        bairrosMap.set(d.Bairros,+Math.trunc((deathsByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
-      }       
-    })
-    return bairrosMap
-  })
+  bairros_info = await set_bairros_info()
 
   async function buildMap(){
+    document.getElementById('map_obitos').innerHTML = "<div id='mapid'><h5> Mapa </h5></div>";
     let mapInstance = L.map('mapid').setView([-3.792614,-38.515877], 12)
     let blues = ["#E0AAFF", "#C77DFF", "#9D4EDD","#7B2CBF","#5A189A", "#3C096C", "#10002B"]
     let colorScale = d3.scaleQuantile()
@@ -301,5 +334,5 @@
 
 
   buildvis() 
-  buildMap()
+  t = buildMap()
 })()
