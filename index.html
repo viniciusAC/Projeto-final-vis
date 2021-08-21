@@ -14,13 +14,13 @@
 </head>
 <body>
   <main role="main" class="container">
-  <div class="row">
+  <div class="row mt-5">
     <h4> COVID Fortaleza</h4>
     <div id='filter-period-graph'>
       <h5> Selecione o periodo </h5>
     </div>
   </div>
-  <div class='row'>
+  <div class='row mt-5'>
     <div id='death'>
       <h5> Mortes por dia </h5>
     </div>
@@ -33,7 +33,7 @@
       </div>
     </div>
   </div>
-  <div class='row'>
+  <div class='row mt-5'>
     <div id='cases'>
       <h5> Casos por dia </h5>
     </div>
@@ -46,13 +46,13 @@
       </div>
     </div>
   </div>
-  <div class='row'>
+  <div class='row mt-5'>
     <div id='mapid'>
       <h5> Mapa </h5>
     </div>
-    <div id='calendarid'>
+    <div id='calendarid' class="mt-5">
       <h5> Calendário de Casos Confirmados de COVID-19 por Dia </h5>
-      <svg width="900" height="300"></svg>
+      <svg width="1100" height="350" class='calendar'></svg>
     </div>
   </div>
   <p>Earthquake data via <a href="https://quakesearch.geonet.org.nz/">Geonet</a>.</p>
@@ -60,6 +60,8 @@
 
   <script src="https://unpkg.com/topojson@3"></script>
   <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="http://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-array.v2.min.js"></script>
   <script src="https://unpkg.com/dc@4.2.7/dist/dc.js"></script>
   <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
   <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
