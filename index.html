@@ -1,14 +1,69 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <link rel="stylesheet" href="style.css">
-    <script src="./javascripts/index.js"></script>
-  </head>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-KyZXEAg3QhqLMpG8r+8fhAXLRk2vvoC2f3B09zVXn8CA5QIVfZOJ3BCsw2P0p/We" crossorigin="anonymous">
+  <link rel="stylesheet" type="text/css" href="https://unpkg.com/dc@4/dist/style/dc.css"/>
+  <link rel="stylesheet" href="https://unpkg.com/leaflet@1.6.0/dist/leaflet.css"
+   integrity="sha512-xwE/Az9zrjBIphAcBb3F6JVqxf46+CDLwfLMHloNu6KEQCAWi6HcDUbeOfBIptF7tcCzusKFjFw2yuvEpDL9wQ=="
+   crossorigin=""/>
+  <link rel="stylesheet" href="index.css">
+  <title>Trab Vis</title>
+</head>
+<body>
+  <main role="main" class="container">
+  <div class="row">
+    <h4> COVID Fortaleza</h4>
+    <div id='filter-period-graph'>
+      <h5> Selecione o periodo </h5>
+    </div>
+  </div>
+  <div class='row'>
+    <div id='death'>
+      <h5> Mortes por dia </h5>
+    </div>
+    <div id='deaths-age-group-chart' class="col-6">
+      <h5> Percentual de obitos por faixa etaria </h5>
+    </div>
+    <div class="col-6">
+      <div id='death-neighborhood-chart'>
+        <h5> Bairros com maior número de mortes </h5>
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div id='cases'>
+      <h5> Casos por dia </h5>
+    </div>
+    <div id='cases-age-group-chart' class="col-6">
+      <h5> Percentual de casos por faixa etaria </h5>
+    </div>
+    <div class="col-6">
+      <div id='cases-neighborhood-chart'>
+        <h5> Bairros com maior número de casos </h5>
+      </div>
+    </div>
+  </div>
+  <div class='row'>
+    <div id='mapid'>
+      <h5> Mapa </h5>
+    </div>
+    <div id='calendarid'>
+      <h5> Calendário de Casos Confirmados de COVID-19 por Dia </h5>
+      <svg width="900" height="300"></svg>
+    </div>
+  </div>
+  <p>Earthquake data via <a href="https://quakesearch.geonet.org.nz/">Geonet</a>.</p>
+  </main>
 
-  <body>
-    <h1>Alo galera de cawlboy!!!</h1>
-    <h2>Alo galera de peão</h2>
-    <h3> Quem gosta de rodeio bate forte com a mão!</h3>
-  </body>
-
+  <script src="https://unpkg.com/topojson@3"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://unpkg.com/dc@4.2.7/dist/dc.js"></script>
+  <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  <script src="/scripts/index.js"></script>
+</body>
 </html>
