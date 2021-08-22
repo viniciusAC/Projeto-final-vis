@@ -202,7 +202,7 @@
   }
 
   async function set_bairros_info() {
-    x = await d3.csv("base_de_dados/dados_bairros.csv").then(function(data) {
+    x = await d3.csv("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/dados_bairros.csv").then(function(data) {
       let bairrosMap = new Map()
       data.forEach(function(d) {
         if (d["populaçao em 2020"] < 1){
