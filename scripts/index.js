@@ -88,6 +88,7 @@
       .brushOn(false)
       .group(death_by_day, 'Obitos')
       .ordinalColors(['purple'])
+      .elasticY(true)
     
     //Gráfico de Linhas de casos por dia
     lineChart2.width(width)
@@ -102,6 +103,7 @@
       .brushOn(false)
       .group(cases_by_day, 'Casos confirmados')
       .ordinalColors(['blue'])
+      .elasticY(true)
     
     //Gráfico de Setor de Casos por Idade
     pieChart.width(300)
@@ -154,7 +156,7 @@
     barChart.width(500)
       .height(400)
       .dimension(bairroDim)
-      .gap(80)
+      .gap(30)
       .margins({top: 30, right: 50, bottom: 25, left: 40})
       .x(x_bairro_scale)
       .renderHorizontalGridLines(true)
@@ -165,7 +167,9 @@
       .ordinalColors(['purple'])
       .elasticX(true)
       .ordering(function(d) { return -d.value; })
-      
+      .on("filtered", function(chart,filter){
+        setar_mapa()
+      });
     
     //Gráfico de Barras de Bairros com maior número de casos
     let cases_by_bairro_top = getTops(cases_by_bairro)
@@ -173,7 +177,7 @@
     barChart2.width(500)
       .height(400)
       .dimension(bairroDim)
-      .gap(80)
+      .gap(30)
       .margins({top: 30, right: 50, bottom: 25, left: 40})
       .x(x_bairro_scale2)
       .renderHorizontalGridLines(true)
@@ -183,6 +187,9 @@
       .xUnits(dc.units.ordinal)
       .elasticX(true)
       .ordering(function(d) { return -d.value; })
+      .on("filtered", function(chart,filter){
+        setar_mapa()
+      });
 
     dc.renderAll()
   }  
@@ -208,6 +215,26 @@
       return bairrosMap
     })
     return x
+  }
+
+  function updateFilters(){
+    if (clicked[0] === ''){
+      bairroDim.filterFunction(function(d) {
+        // console.log(d)
+        return d != clicked[0];
+      });
+    }
+    else{
+      bairroDim.filterFunction(function(d) {
+        // console.log(d)
+        return d === clicked[0];
+      });
+    } 
+    dc.redrawAll();
+    bairroDim.filterFunction(function(d) {
+      // console.log(d)
+      return d != '';
+    });
   }
 
   // MAPA
@@ -290,12 +317,36 @@
     }
 
     function resetHighlight(e) {
-      geojson.resetStyle(e.target);
+      if (clicked[0] != e.target.feature.properties.NOME) {
+        geojson.resetStyle(e.target);
+      }
       infoControl.update();
     }
 
+    clicked =  ['']
+    antigo = ''
     function zoomToFeature(e) {
       mapInstance.fitBounds(e.target.getBounds());
+      nome_passado = ''
+      while(clicked.length > 0) {
+        nome_passado = clicked.pop();
+      }
+      if (nome_passado != e.target.feature.properties.NOME) {
+        geojson.resetStyle(antigo.target);
+        clicked.push(e.target.feature.properties.NOME)
+        var layer = e.target;
+
+        layer.setStyle({
+          fillColor: 'yellow'
+        });
+
+        antigo = e
+      }
+      else {
+        clicked.push('')
+        geojson.resetStyle(e.target);
+      }
+      updateFilters()
     }
 
     function onEachFeature(feature, layer) {
