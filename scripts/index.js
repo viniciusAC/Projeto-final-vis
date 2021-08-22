@@ -14,7 +14,11 @@
   // Auxiliares
   function getTops(source_group) {
     return {
-      all: () => { return source_group.top(5) }
+      all: function(){ 
+        return source_group.top(6).filter(function(d){ 
+          return d.key != "Indeterminado"; 
+        })
+      }
     }
   }
 
@@ -39,7 +43,7 @@
   cases_by_age = ageDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Setor de Casos por Idade
   death_by_age = ageDim.group().reduceSum(d => d.obitos) //Gráfico de Setor de Mortes por Idade
 
-  bairroDim = facts.dimension(d => d.bairro).filter(function(d) { return d != "Indeterminado"; }) //Gráfico de Barras e Mapa
+  bairroDim = facts.dimension(d => d.bairro) //Gráfico de Barras e Mapa
   death_by_bairro = bairroDim.group().reduceSum(d => d.obitos) //Gráfico de Barras
   cases_by_bairro = bairroDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Barras e Mapa
 
@@ -138,19 +142,15 @@
       });
 
     function update_bar_chart() {
-      bairros = death_by_bairro.top(5).map(d => d.key)
-      x_bairro_scale = d3.scaleOrdinal().domain(bairros)
+      x_bairro_scale = d3.scaleOrdinal()
       barChart.x(x_bairro_scale)
-      cases_bairros = cases_by_bairro.top(5).map(d => d.key)
-      x_bairro_scale2 = d3.scaleOrdinal().domain(cases_bairros)
+      x_bairro_scale2 = d3.scaleOrdinal()
       barChart2.x(x_bairro_scale2)
     }
     
     //Gráfico de Barras de Bairros com maior número de mortes
-    let bairroDim = facts.dimension(d => d.bairro).filter(function(d) { return d != "Indeterminado"; })
     let death_by_bairro_top = getTops(death_by_bairro)
-    let bairros = death_by_bairro.top(5).map(d => d.key)
-    let x_bairro_scale = d3.scaleOrdinal().domain(bairros)
+    let x_bairro_scale = d3.scaleOrdinal()
     barChart.width(500)
       .height(400)
       .dimension(bairroDim)
@@ -163,12 +163,13 @@
       .group(death_by_bairro_top, 'Obitos')
       .xUnits(dc.units.ordinal)
       .ordinalColors(['purple'])
-      .elasticX()
+      .elasticX(true)
+      .ordering(function(d) { return -d.value; })
+      
     
     //Gráfico de Barras de Bairros com maior número de casos
     let cases_by_bairro_top = getTops(cases_by_bairro)
-    let cases_bairros = cases_by_bairro.top(5).map(d => d.key)
-    let x_bairro_scale2 = d3.scaleOrdinal().domain(cases_bairros)
+    let x_bairro_scale2 = d3.scaleOrdinal()
     barChart2.width(500)
       .height(400)
       .dimension(bairroDim)
@@ -180,7 +181,8 @@
       .brushOn(true)
       .group(cases_by_bairro_top, 'Casos')
       .xUnits(dc.units.ordinal)
-      .elasticX()
+      .elasticX(true)
+      .ordering(function(d) { return -d.value; })
 
     dc.renderAll()
   }  
