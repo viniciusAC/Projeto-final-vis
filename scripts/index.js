@@ -1,13 +1,13 @@
 (async function() {
   // Importação de dados
-  covid_data = await d3.json("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/Base_de_dados.json").then(function(data) {
+  covid_data = await d3.json("base_de_dados/Base_de_dados.json").then(function(data) {
     data.forEach(function(d) {
       d.data = new Date(d.data)
     })
     return data;
   })
 
-  bairros = await d3.json("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/FortalezaBairros.geojson").then(function(data) {
+  bairros = await d3.json("base_de_dados/FortalezaBairros.geojson").then(function(data) {
     return data  
   })
 
@@ -202,7 +202,7 @@
   }
 
   async function set_bairros_info() {
-    x = await d3.csv("/base_de_dados/dados_bairros.csv").then(function(data) {
+    x = await d3.csv("base_de_dados/dados_bairros.csv").then(function(data) {
       let bairrosMap = new Map()
       data.forEach(function(d) {
         if (d["populaçao em 2020"] < 1){
