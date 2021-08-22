@@ -14,48 +14,61 @@
 </head>
 <body>
   <main role="main" class="container">
-  <div class="row mt-5">
-    <h4> COVID Fortaleza</h4>
-    <div id='filter-period-graph'>
-      <h5> Selecione o periodo </h5>
+    <h1> COVID Fortaleza</h1>
+    <b> Equipe: <br>
+      Luis Gustavo de Castro Sousa - 418210 <br>
+      Iury Lima Rosal - 422067 <br>
+      Vinicius Almeida de Castro - 413129
+    </b>
+
+    <div class="row my-5">
+      <h5> Filtro de periodo </h5>
+      <small> Selecione um periodo abaixo para filtrar os demais gráficos</small>
+      <div id='filter-period-graph'></div>
     </div>
-  </div>
-  <div class='row mt-5'>
-    <div id='death'>
+    <div class="row my-5">
       <h5> Mortes por dia </h5>
+      <div id='death'></div>
     </div>
-    <div id='deaths-age-group-chart' class="col-6">
-      <h5> Percentual de obitos por faixa etaria </h5>
-    </div>
-    <div class="col-6">
-      <div id='death-neighborhood-chart'>
+    <div class='row my-5'>
+      <div class="col-4">
+        <h5> Percentual de obitos por faixa etaria </h5>
+        <small> Selecione uma faixa etária abaixo para filtrar os demais gráficos</small>
+        <div id='deaths-age-group-chart'></div>
+      </div>
+      <div class="col-8">
         <h5> Bairros com maior número de mortes </h5>
+        <small> Selecione um bairro para filtrar os demais gráficos</small>
+        <div id='death-neighborhood-chart'></div>
       </div>
     </div>
-  </div>
-  <div class='row mt-5'>
-    <div id='cases'>
+    <div class="row my-5">
       <h5> Casos por dia </h5>
+      <div id='cases'></div>
     </div>
-    <div id='cases-age-group-chart' class="col-6">
-      <h5> Percentual de casos por faixa etaria </h5>
-    </div>
-    <div class="col-6">
-      <div id='cases-neighborhood-chart'>
+    <div class='row my-5'>
+      <div class="col-4">
+        <h5> Percentual de casos por faixa etaria </h5>
+        <small> Selecione uma faixa etária abaixo para filtrar os demais gráficos</small>
+        <div id='cases-age-group-chart'></div>
+      </div>
+      <div class="col-8">
         <h5> Bairros com maior número de casos </h5>
+        <small> Selecione um bairro para filtrar os demais gráficos</small>
+        <div id='cases-neighborhood-chart'>
+        </div>
       </div>
     </div>
-  </div>
-  <div class='row'>
-    <div id='map_obitos'>
+    <div class="row my-5">
       <h5> Mapa </h5>
+      <div id='map_obitos'></div>
     </div>
-    <div id='calendarid' class="mt-5">
+    <div class="row my-5">
       <h5> Calendário de Casos Confirmados de COVID-19 por Dia </h5>
-      <svg width="1100" height="350" class='calendar'></svg>
+      <div id='calendarid'>
+        <svg width="1100" height="350" class='calendar'></svg>
+      </div>
     </div>
-  </div>
-  <p>Earthquake data via <a href="https://quakesearch.geonet.org.nz/">Geonet</a>.</p>
   </main>
 
   <script src="https://unpkg.com/topojson@3"></script>
