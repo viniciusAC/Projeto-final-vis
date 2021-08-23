@@ -32,7 +32,7 @@
     <div class = "container">
       <div class="row my-5">  
         <h2> Filtros </h2>
-        <small> Selecione um periodo abaixo para filtrar os gráficos de casos, óbitos e o de mapa. Para remover o filtro, basta dar um duplo clique no filtro dentro do espaço selecionado ou um clique fora do espaço selecionado.</small>
+        <small> Selecione um periodo abaixo para filtrar os gráficos de casos, óbitos e o de mapa.</small>
         <div class='botao'>
           <a href="javascript:periodBarChart.filterAll();dc.redrawAll();">
             <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
@@ -41,9 +41,10 @@
         <div id='filter-period-graph'></div>
         <small> <br/> <b> Outros filtros possíveis: </b> <br/>
         - Selecionar setores no gráfico de setor: irá filtrar os gráficos de casos, óbitos e o de mapa. Você pode selecionar mais de um setor. <br/>
-        - Selecionar algum bairro do gráfico de barras: irá filtrar os gráficos de casos e de óbitos. Você pode selecionar mais de um bairro. <br/>
+        - Selecionar algum bairro do gráfico de barras: irá filtrar os gráficos de casos, de óbitos e o de mapa. Você pode selecionar mais de um bairro. <br/>
+        - Selecionar um bairro no mapa: irá filtrar os gráficos de casos e de óbitos. Você pode selecionar um único bairro.
         <br/>
-        <i> Esses filtros podem ser combinados entre si e com o filtro de período. Para retirar esses filtros selecionados, basta clicar novamente no que foi selecionado. </i> 
+        <i> Esses filtros podem ser combinados entre si e com o filtro de período, com exceção do mapa. O mapa só é combinável com outros filtros caso ele seja selecionado por último na sequência de filtros. Ao selecionar qualquer outro filtro após a seleção no mapa, o filtro do mapa é removido. Para retirar os demais filtros selecionados, basta clicar novamente no que foi selecionado ou utilizar o botão de "Limpar este filtro", caso disponível. </i> 
       </small>
       </div>
     </div>
@@ -70,12 +71,7 @@
         </div>
         <div class="col-8">
           <h4> Bairros com maior número de casos </h4>
-          <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
-          <div class='botao'>
-            <a href="javascript:barChart.filterAll();dc.redrawAll();update_bar_chart();">
-              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
-            </a>
-          </div>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos. Para retirar o filtro, basta clicar sob as barras selecionadas. </small>
           <div id='cases-neighborhood-chart'>
           </div>
         </div>
@@ -104,12 +100,7 @@
         </div>
         <div class="col-8">
           <h3> Bairros com maior número de Óbitos </h3>
-          <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
-          <div class='botao'>
-            <a href="javascript:barChart2.filterAll();dc.redrawAll();">
-              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
-            </a>
-          </div>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos. Para retirar o filtro, basta clicar sob as barras selecionadas. </small>
           <div id='death-neighborhood-chart'></div>
         </div>
       </div>
@@ -121,7 +112,12 @@
 
     <div class = "container">
       <div class="row my-5">
-        <small> Selecione um bairro para filtrar os demais graficos. Para retirar o filtro basta clicar no bairro novamente. Não é possível realizar uma seleção múltipla de bairros. Clicando em outro filtro após a seleção no mapa, ocorrerá a retirada desse filtro também. <br/> </small>
+        <small> Selecione um bairro para filtrar os demais graficos. Não é possível realizar uma seleção múltipla de bairros. Clicando em outro filtro, após a seleção no mapa, ocorrerá a retirada do filtro do mapa. <br/> </small>
+        <div class='botao'>
+          <a href="javascript:setar_mapa();dc.redrawAll();update_bar_chart();">
+            <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+          </a>
+        </div>
         <div id='map_obitos'></div>
       </div>
     </div>

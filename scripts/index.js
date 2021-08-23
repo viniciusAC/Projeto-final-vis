@@ -45,9 +45,10 @@
   death_by_age = ageDim_piechart2.group().reduceSum(d => d.obitos) //Gráfico de Setor de Mortes por Idade
 
   bairroDim = facts.dimension(d => d.bairro) //Gráfico de Barras e Mapa
+  bairroDim2 = facts.dimension(d => d.bairro)
   map_bairroDim = facts.dimension(d => d.bairro)
   death_by_bairro = bairroDim.group().reduceSum(d => d.obitos) //Gráfico de Barras
-  cases_by_bairro = bairroDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Barras e Mapa
+  cases_by_bairro = bairroDim2.group().reduceSum(d => d['casos confirmados']) //Gráfico de Barras e Mapa
   
 
   width = 1100
@@ -146,7 +147,7 @@
         update_bar_chart()
       });
 
-    function update_bar_chart() {
+    update_bar_chart = function() {
       death_by_bairro_top = getTops(death_by_bairro)
       cases_by_bairro_top = getTops(cases_by_bairro)
       x_bairro_scale = d3.scaleOrdinal()
@@ -171,6 +172,7 @@
       .xUnits(dc.units.ordinal)
       .ordinalColors(['purple'])
       .elasticX(true)
+      .elasticY(true)
       .ordering(function(d) { return -d.value; })
       .on("filtered", function(chart, filter){
         setar_mapa()
@@ -181,7 +183,7 @@
     let x_bairro_scale2 = d3.scaleOrdinal()
     barChart2.width(500)
       .height(400)
-      .dimension(bairroDim)
+      .dimension(bairroDim2)
       .gap(30)
       .margins({top: 30, right: 50, bottom: 25, left: 40})
       .x(x_bairro_scale2)
@@ -191,6 +193,7 @@
       .group(cases_by_bairro_top, 'Casos')
       .xUnits(dc.units.ordinal)
       .elasticX(true)
+      .elasticY(true)
       .ordering(function(d) { return -d.value; })
       .on("filtered", function(chart, filter){
         setar_mapa()
@@ -198,7 +201,7 @@
 
     dc.renderAll()
     
-    async function setar_mapa() {
+    setar_mapa = async function() {
       cases_by_bairro_map = map_bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
       casesByName = transform_dict(cases_by_bairro_map)
       bairros_info = await set_bairros_info()
@@ -416,6 +419,7 @@
       .attr("y", -5)
       .attr("font-weight", "bold")
       .attr("text-anchor", "end")
+      .attr("fill", "white")
       .text(([key]) => key);
 
     year.append("g")
