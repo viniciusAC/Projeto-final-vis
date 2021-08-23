@@ -195,8 +195,8 @@
   }  
 
   async function setar_mapa() {
-    death_by_bairro_map = bairroDim.group().reduceSum(d => d.obitos).top(Infinity)
-    deathsByName = transform_dict(death_by_bairro_map)
+    cases_by_bairro_map = bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
+    casesByName = transform_dict(cases_by_bairro_map)
     bairros_info = await set_bairros_info()
     buildMap()
   }
@@ -209,7 +209,7 @@
           bairrosMap.set(d.Bairros, 0)
         }
         else{
-          bairrosMap.set(d.Bairros,+Math.trunc((deathsByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
+          bairrosMap.set(d.Bairros,+Math.trunc((casesByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
         }       
       })
       return bairrosMap
@@ -235,8 +235,8 @@
   }
 
   // MAPA
-  death_by_bairro_map = bairroDim.group().reduceSum(d => d.obitos).top(Infinity)
-  let deathsByName = transform_dict(death_by_bairro_map)
+  cases_by_bairro_map = bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
+  let casesByName = transform_dict(cases_by_bairro_map)
   bairros_info = await set_bairros_info()
 
   async function buildMap(){
@@ -244,7 +244,7 @@
     let mapInstance = L.map('mapid').setView([-3.792614,-38.515877], 12)
     let blues = ["#E0AAFF", "#C77DFF", "#9D4EDD","#7B2CBF","#5A189A", "#3C096C", "#10002B"]
     let colorScale = d3.scaleQuantile()
-      .domain([0, 20, 40, 70, 100, 200, 400, 700])
+      .domain([0, 500, 1000, 1500, 2000, 6000, 8000, 13000])
       .range(blues)
 
     L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{ 
@@ -279,8 +279,8 @@
       return this._div;
     }
     infoControl.update = function (feat) {
-      this._div.innerHTML = '<h5>Número de óbitos por 10k habitantes</h5>' +  (feat ?
-        '<b>' + feat.properties.NOME + '</b><br />' + bairros_info.get(feat.properties.NOME) + ' óbitos por 10k hab'
+      this._div.innerHTML = '<h5>Número de casos confirmados por 10k habitantes</h5>' +  (feat ?
+        '<b>' + feat.properties.NOME + '</b><br />' + bairros_info.get(feat.properties.NOME) + ' casos por 10k hab'
         : 'Passe o mouse sobre um bairro');
     }
     infoControl.addTo(mapInstance)
