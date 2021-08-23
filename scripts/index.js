@@ -60,7 +60,7 @@
 
     let xScale = d3.scaleTime().domain([dateDim.bottom(1)[0].data, dateDim.top(1)[0].data])
     periodBarChart.width(width)
-      .height(70)
+      .height(40)
       .margins({top: 10, right: 20, bottom: 20, left: 30})
       .dimension(dateDim_filter)
       .group(cases_normalized_by_day)
@@ -220,19 +220,16 @@
   function updateFilters(){
     if (clicked[0] === ''){
       bairroDim.filterFunction(function(d) {
-        // console.log(d)
         return d != clicked[0];
       });
     }
     else{
       bairroDim.filterFunction(function(d) {
-        // console.log(d)
         return d === clicked[0];
       });
     } 
     dc.redrawAll();
     bairroDim.filterFunction(function(d) {
-      // console.log(d)
       return d != '';
     });
   }
@@ -365,6 +362,7 @@
     return geojson
   }
 
+  //Calendário
   cases_by_day_calendar = dateDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
   years = d3.groups(cases_by_day_calendar, d => d.key.getUTCFullYear()).reverse()
   cellSize = 17
@@ -382,9 +380,10 @@
         : `M${(w + 1) * cellSize},0V${d * cellSize}H${w * cellSize}`}V${n * cellSize}`;
   }
 
+  //Gráfico de Calendário 
   formatValue = d3.format("+.4")
   formatClose = d3.format("$,.2f")
-  formatDate = d3.utcFormat("%x")
+  formatDate = d3.utcFormat("%-d/%-m/%Y")
   formatDay = i => "DSTQQSS"[i]
   formatMonth = d3.utcFormat("%b")
 
@@ -393,7 +392,6 @@
     .domain([0, +max])
     .range(["#E0AAFF", "#C77DFF", "#9D4EDD","#7B2CBF","#5A189A", "#3C096C", "#10002B"]);
 
-  //Gráfico de Calendário 
   async function buildCalendar() {
     var svg = d3.select('.calendar')
     .attr("viewBox", [0, 0, width, height * years.length])
@@ -418,6 +416,7 @@
       .data(d3.range(7))
       .join("text")
       .attr("x", -5)
+      .attr("fill", "white")
       .attr("y", i => (countDay(i) + 0.5) * cellSize)
       .attr("dy", "0.31em")
       .text(formatDay);
@@ -433,7 +432,7 @@
       .attr("fill", d => color(d.value))
       .append("title")
       .text(d => `${formatDate(d.key)}
-    ${formatValue(d.value)}${d.close === undefined ? "" : `
+    ${formatValue(d.value)} casos ${d.close === undefined ? "" : `
     ${formatClose(d.close)}`}`);
 
     const month = year.append("g")
@@ -443,13 +442,14 @@
 
     month.filter((d, i) => i).append("path")
       .attr("fill", "none")
-      .attr("stroke", "#fff")
-      .attr("stroke-width", 3)
+      .attr("stroke", "black")
+      .attr("stroke-width", 4)
       .attr("d", pathMonth);
 
     month.append("text")
       .attr("x", d => timeWeek.count(d3.utcYear(d), timeWeek.ceil(d)) * cellSize + 2)
       .attr("y", -5)
+      .attr("fill", "white")
       .text(formatMonth);
       
     return svg.node();

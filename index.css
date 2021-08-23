@@ -16,6 +16,8 @@ body {
 #mapid {
   width: 1100px;
   height: 590px;
+  padding-top: 10px;
+  padding-bottom: 10px;
 }
 .info {
   padding: 6px 8px;
@@ -43,3 +45,60 @@ body {
   opacity: 0.7;
 }
 #filter-period-graph svg g g.axis.y { display: none; }
+
+.dark-session {
+  background-color: black;
+  color: white;
+  box-shadow: 0 0 20px rgba(0,0,0,0.2);
+  padding-top: 70px;
+  padding-bottom: 70px;
+  text-align: center;
+  margin: 0px;
+  width: 100%;
+}
+
+.title-section {
+  text-align: center;
+  background-color: #3C096C;
+  color: white;
+  padding-top: 70px;
+  padding-bottom: 70px; 
+  width: 100%;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.title-project {
+  text-align: center;
+  background-color: #3C096C;
+  color: white;
+  padding-top: 70px;
+  padding-bottom: 70px; 
+  width: 100%;
+  margin: 0px;
+  box-shadow: 0 0 15px rgba(0,0,0,0.2);
+}
+
+.rodape{
+  text-align: center;
+  color: #3C096C;
+}
+
+#cases-age-group-chart{
+  padding-top: 10px;
+  padding-bottom: 10px; 
+}
+
+#cases-neighborhood-chart{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#deaths-age-group-chart{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
+#death-neighborhood-chart{
+  padding-top: 10px;
+  padding-bottom: 10px;
+}

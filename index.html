@@ -13,62 +13,95 @@
   <title>Trab Vis</title>
 </head>
 <body>
-  <main role="main" class="container">
-    <h1> COVID Fortaleza</h1>
-    <b> Equipe: <br>
-      Luis Gustavo de Castro Sousa - 418210 <br>
-      Iury Lima Rosal - 422067 <br>
-      Vinicius Almeida de Castro - 413129
-    </b>
+  <main role="main">
+    <div class="row title-project">
+      <h1> COVID-19 Fortaleza</h1>
+    <small>Dados extraídos do site do <b>Covid ÍntegraSUS</b> e dados disponibilizados pela Prefeitura de Fortaleza da <b>População Consolidada por Bairro segundo a faixa etária, Fortaleza, 2020</b>.</small>  
+    </div>
+    
+    <div class = "container">
+      <div class="row my-5">
+        <h2> Filtros </h2>
+        <small> Selecione um periodo abaixo para filtrar os gráficos de casos, óbitos e o de mapa. Para remover o filtro, basta dar um duplo clique no filtro dentro do espaço selecionado ou um clique fora do espaço selecionado.</small>
+        <div id='filter-period-graph'></div>
+        <small> <br/> <b> Outros filtros possíveis: </b> <br/>
+        - Selecionar setores no gráfico de setor: irá filtrar os gráficos de casos, óbitos e o de mapa. Você pode selecionar mais de um setor. <br/>
+        - Selecionar algum bairro do gráfico de barras: irá filtrar os gráficos de casos e de óbitos. Você pode selecionar mais de um bairro. <br/>
+        <br/>
+        <i> Esses filtros podem ser combinados entre si e com o filtro de período. Para retirar esses filtros selecionados, basta clicar novamente no que foi selecionado. </i> 
+      </small>
+      </div>
+    </div>
 
-    <div class="row my-5">
-      <h5> Filtro de periodo </h5>
-      <small> Selecione um periodo abaixo para filtrar os demais gráficos</small>
-      <div id='filter-period-graph'></div>
+    <div class="row my-5 title-section">
+      <h2> Casos Confirmados de COVID-19 - Fortaleza (CE) </h2>
     </div>
-    <div class="row my-5">
-      <h5> Mortes por dia </h5>
-      <div id='death'></div>
-    </div>
-    <div class='row my-5'>
-      <div class="col-4">
-        <h5> Percentual de obitos por faixa etaria </h5>
-        <small> Selecione uma faixa etária abaixo para filtrar os demais gráficos</small>
-        <div id='deaths-age-group-chart'></div>
+
+    <div class = "container">
+      <div class="row my-5">
+        <h3> Casos por dia </h3>
+        <div id='cases'></div>
       </div>
-      <div class="col-8">
-        <h5> Bairros com maior número de mortes </h5>
-        <small> Selecione um bairro para filtrar os demais gráficos</small>
-        <div id='death-neighborhood-chart'></div>
-      </div>
-    </div>
-    <div class="row my-5">
-      <h5> Casos por dia </h5>
-      <div id='cases'></div>
-    </div>
-    <div class='row my-5'>
-      <div class="col-4">
-        <h5> Percentual de casos por faixa etaria </h5>
-        <small> Selecione uma faixa etária abaixo para filtrar os demais gráficos</small>
-        <div id='cases-age-group-chart'></div>
-      </div>
-      <div class="col-8">
-        <h5> Bairros com maior número de casos </h5>
-        <small> Selecione um bairro para filtrar os demais gráficos</small>
-        <div id='cases-neighborhood-chart'>
+      <div class='row my-5'>
+        <div class="col-4">
+          <h4> Percentual de casos por faixa etaria </h4>
+          <small> Selecione as faixas etárias desejadas abaixo para aplicação do filtro. <br/> </small>
+          <div id='cases-age-group-chart'></div>
+        </div>
+        <div class="col-8">
+          <h4> Bairros com maior número de casos </h4>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
+          <div id='cases-neighborhood-chart'>
+          </div>
         </div>
       </div>
     </div>
-    <div class="row my-5">
-      <h5> Mapa </h5>
-      <small> Selecione um bairro para filtrar os demais graficos (A utilização de outro filtro irá remover este) </small>
-      <div id='map_obitos'></div>
+
+    <div class="row my-5 title-section">
+      <h2> Óbitos Ocasionados pelo COVID-19 - Fortaleza (CE) </h2>
     </div>
-    <div class="row my-5">
-      <h5> Calendário de Casos Confirmados de COVID-19 por Dia </h5>
+
+    <div class = "container">
+      <div class="row my-5">
+        <h2> Óbitos por dia </h2>
+        <div id='death'></div>
+      </div>
+      <div class='row my-5'>
+        <div class="col-4">
+          <h3> Percentual de Óbitos por Faixa Etária </h3>
+          <small> Selecione as faixas etárias desejadas abaixo para aplicação do filtro. <br/> </small>
+          <div id='deaths-age-group-chart'></div>
+        </div>
+        <div class="col-8">
+          <h3> Bairros com maior número de Óbitos </h3>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
+          <div id='death-neighborhood-chart'></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="row my-5 title-section">
+      <h2> Mapa - Fortaleza (CE) </h2>
+    </div>
+
+    <div class = "container">
+      <div class="row my-5">
+        <small> Selecione um bairro para filtrar os demais graficos. Para retirar o filtro basta clicar no bairro novamente. Não é possível realizar uma seleção múltipla de bairros. Clicando em outro filtro após a seleção no mapa, ocorrerá a retirada desse filtro também. <br/> </small>
+        <div id='map_obitos'></div>
+      </div>
+    </div>
+
+    <div class="row my-5 dark-session">
+      <h2> Calendário de Casos Confirmados de COVID-19 por Dia </h2>
+      <p>Gráfico, não filtrável, apenas para exibir como os casos de COVID-19 ocorreram em Fortaleza ao longo dos meses e dias da semana, entre o período de Janeiro de 2020 e Agosto de 2021.<br/>
+        <br/> <b>Passe o mouse por cima do dia específico desejado e visualize a data com o número de casos confirmados. </b><br/>
+        <br/> <i> Sugerimos considerar que os casos que foram confirmados, em determinado dia, foram resultados de uma contaminação que ocorreu em 4-5 dias anteriores a esse dia da confirmação. </i></p>
       <div id='calendarid'>
         <svg width="1100" height="350" class='calendar'></svg>
       </div>
+    </div>
+    <div class="rodape">
+      <small><b> © Iury Lima Rosal, Luís Gustavo de Castro, Vinícius Almeida de Castro | 2021 | Universidade Federal do Ceará (UFC)</b></small>
     </div>
   </main>
 
