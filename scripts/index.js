@@ -39,24 +39,27 @@
   death_by_day = dateDim.group().reduceSum(d => d.obitos)  //Gráfico de Linhas de mortes por dia
   cases_by_day = dateDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Linhas de casos por dia
 
-  ageDim = facts.dimension(d => d.faixa_etaria) //Gráfico de Setor
-  cases_by_age = ageDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Setor de Casos por Idade
-  death_by_age = ageDim.group().reduceSum(d => d.obitos) //Gráfico de Setor de Mortes por Idade
+  ageDim_piechart = facts.dimension(d => d.faixa_etaria) //Gráfico de Setor
+  ageDim_piechart2 = facts.dimension(d => d.faixa_etaria) //Gráfico de Setor
+  cases_by_age = ageDim_piechart.group().reduceSum(d => d['casos confirmados']) //Gráfico de Setor de Casos por Idade
+  death_by_age = ageDim_piechart2.group().reduceSum(d => d.obitos) //Gráfico de Setor de Mortes por Idade
 
   bairroDim = facts.dimension(d => d.bairro) //Gráfico de Barras e Mapa
+  map_bairroDim = facts.dimension(d => d.bairro)
   death_by_bairro = bairroDim.group().reduceSum(d => d.obitos) //Gráfico de Barras
   cases_by_bairro = bairroDim.group().reduceSum(d => d['casos confirmados']) //Gráfico de Barras e Mapa
+  
 
   width = 1100
   async function buildSimpleGrapics() {
     //Geração de Gráficos (exceto o de mapa)
-    let periodBarChart = dc.barChart(document.querySelector("#filter-period-graph"))
-    let lineChart = dc.lineChart(document.querySelector("#death"))
-    let lineChart2 = dc.lineChart(document.querySelector("#cases"))
-    let pieChart = dc.pieChart(document.querySelector("#cases-age-group-chart"))
-    let pieChart2 = dc.pieChart(document.querySelector("#deaths-age-group-chart"))
-    let barChart = dc.barChart(document.querySelector("#death-neighborhood-chart"))
-    let barChart2 = dc.barChart(document.querySelector("#cases-neighborhood-chart"))
+    periodBarChart = dc.barChart(document.querySelector("#filter-period-graph"))
+    lineChart = dc.lineChart(document.querySelector("#death"))
+    lineChart2 = dc.lineChart(document.querySelector("#cases"))
+    pieChart = dc.pieChart(document.querySelector("#cases-age-group-chart"))
+    pieChart2 = dc.pieChart(document.querySelector("#deaths-age-group-chart"))
+    barChart = dc.barChart(document.querySelector("#death-neighborhood-chart"))
+    barChart2 = dc.barChart(document.querySelector("#cases-neighborhood-chart"))
 
     let xScale = d3.scaleTime().domain([dateDim.bottom(1)[0].data, dateDim.top(1)[0].data])
     periodBarChart.width(width)
@@ -110,7 +113,7 @@
       .height(400)
       .slicesCap(4)
       .innerRadius(100)
-      .dimension(ageDim)
+      .dimension(ageDim_piechart)
       .group(cases_by_age)
       .legend(dc.legend().highlightSelected(true))
       .ordinalColors(['#C215B2', '#720AC9', '#0600B3', '#0A62C9', '#0AB8C2'])
@@ -129,7 +132,7 @@
       .height(350)
       .slicesCap(3)
       .innerRadius(100)
-      .dimension(ageDim)
+      .dimension(ageDim_piechart2)
       .group(death_by_age)
       .legend(dc.legend().highlightSelected(true))
       .ordinalColors(['#C215B2', '#720AC9', '#0600B3', '#0A62C9'])
@@ -144,6 +147,8 @@
       });
 
     function update_bar_chart() {
+      death_by_bairro_top = getTops(death_by_bairro)
+      cases_by_bairro_top = getTops(cases_by_bairro)
       x_bairro_scale = d3.scaleOrdinal()
       barChart.x(x_bairro_scale)
       x_bairro_scale2 = d3.scaleOrdinal()
@@ -167,7 +172,7 @@
       .ordinalColors(['purple'])
       .elasticX(true)
       .ordering(function(d) { return -d.value; })
-      .on("filtered", function(chart,filter){
+      .on("filtered", function(chart, filter){
         setar_mapa()
       });
     
@@ -187,180 +192,183 @@
       .xUnits(dc.units.ordinal)
       .elasticX(true)
       .ordering(function(d) { return -d.value; })
-      .on("filtered", function(chart,filter){
+      .on("filtered", function(chart, filter){
         setar_mapa()
       });
 
     dc.renderAll()
-  }  
+    
+    async function setar_mapa() {
+      cases_by_bairro_map = map_bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
+      casesByName = transform_dict(cases_by_bairro_map)
+      bairros_info = await set_bairros_info()
+      buildMap()
+    }
 
-  async function setar_mapa() {
-    cases_by_bairro_map = bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
-    casesByName = transform_dict(cases_by_bairro_map)
-    bairros_info = await set_bairros_info()
-    buildMap()
-  }
-
-  async function set_bairros_info() {
-    x = await d3.csv("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/dados_bairros.csv").then(function(data) {
-      let bairrosMap = new Map()
-      data.forEach(function(d) {
-        if (d["populaçao em 2020"] < 1){
-          bairrosMap.set(d.Bairros, 0)
-        }
-        else{
-          bairrosMap.set(d.Bairros,+Math.trunc((casesByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
-        }       
+    async function set_bairros_info() {
+      x = await d3.csv("https://raw.githubusercontent.com/viniciusAC/Projeto-final-vis/main/base_de_dados/dados_bairros.csv").then(function(data) {
+        let bairrosMap = new Map()
+        data.forEach(function(d) {
+          if (d["populaçao em 2020"] < 1){
+            bairrosMap.set(d.Bairros, 0)
+          }
+          else{
+            bairrosMap.set(d.Bairros,+Math.trunc((casesByName.get(d.Bairros)/d["populaçao em 2020"])*10000))
+          }       
+        })
+        return bairrosMap
       })
-      return bairrosMap
-    })
-    return x
-  }
+      return x
+    }
 
-  function updateFilters(){
-    if (clicked[0] === ''){
-      bairroDim.filterFunction(function(d) {
-        return d != clicked[0];
+    function updateFilters(){
+      if (clicked[0] === ''){
+        map_bairroDim.filterFunction(function(d) {
+          return d != clicked[0];
+        });
+      }
+      else{
+        map_bairroDim.filterFunction(function(d) {
+          return d === clicked[0];
+        });
+      } 
+      update_bar_chart(); 
+      dc.redrawAll();
+      map_bairroDim.filterFunction(function(d) {
+        return d != '';
       });
     }
-    else{
-      bairroDim.filterFunction(function(d) {
-        return d === clicked[0];
-      });
-    } 
-    dc.redrawAll();
-    bairroDim.filterFunction(function(d) {
-      return d != '';
-    });
-  }
 
-  // MAPA
-  cases_by_bairro_map = bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
-  let casesByName = transform_dict(cases_by_bairro_map)
-  bairros_info = await set_bairros_info()
+    // MAPA
+    cases_by_bairro_map = bairroDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
+    let casesByName = transform_dict(cases_by_bairro_map)
+    bairros_info = await set_bairros_info()
 
-  async function buildMap(){
-    document.getElementById('map_obitos').innerHTML = "<div id='mapid'><h5> Mapa </h5></div>";
-    let mapInstance = L.map('mapid').setView([-3.792614,-38.515877], 12)
-    let blues = ["#E0AAFF", "#C77DFF", "#9D4EDD","#7B2CBF","#5A189A", "#3C096C", "#10002B"]
-    let colorScale = d3.scaleQuantile()
-      .domain([0, 500, 1000, 1500, 2000, 6000, 8000, 13000])
-      .range(blues)
+    async function buildMap(){
+      document.getElementById('map_obitos').innerHTML = "<div id='mapid'><h5> Mapa </h5></div>";
+      let mapInstance = L.map('mapid').setView([-3.792614,-38.515877], 12)
+      let blues = ["#E0AAFF", "#C77DFF", "#9D4EDD","#7B2CBF","#5A189A", "#3C096C", "#10002B"]
+      let colorScale = d3.scaleQuantile()
+        .domain([0, 500, 1000, 1500, 2000, 6000, 8000, 13000])
+        .range(blues)
 
-    L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{ 
-      attribution: `&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Map tiles by &copy; <a href="https://carto.com/attribution">CARTO</a>`,
-      maxZoom: 18
-    }).addTo(mapInstance)
+      L.tileLayer("https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_all/{z}/{x}/{y}.png",{ 
+        attribution: `&copy; <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a>, Map tiles by &copy; <a href="https://carto.com/attribution">CARTO</a>`,
+        maxZoom: 18
+      }).addTo(mapInstance)
+      
+      let legendControl = L.control({position: 'bottomright'});
+      legendControl.onAdd = function (map) {
+        let div = L.DomUtil.create('div', 'info legend'),
+        labels = [],
+          n = blues.length,
+        from, to;
     
-    let legendControl = L.control({position: 'bottomright'});
-    legendControl.onAdd = function (map) {
-      let div = L.DomUtil.create('div', 'info legend'),
-      labels = [],
-        n = blues.length,
-      from, to;
-  
-      for (let i = 0; i < n; i++) {
-        let c = blues[i]
-          let fromto = colorScale.invertExtent(c);
-        labels.push(
-          '<i style="background:' + blues[i] + '"></i> ' +
-          d3.format("d")(fromto[0]) + (d3.format("d")(fromto[1]) ? '&ndash;' + d3.format("d")(fromto[1]) : '+'));
-      }
-  
-      div.innerHTML = labels.join('<br>')
-      return div
-    }
-    legendControl.addTo(mapInstance)
-
-    let infoControl = L.control()
-    infoControl.onAdd = function (map) {
-      this._div = L.DomUtil.create('div', 'info');
-      this.update();
-      return this._div;
-    }
-    infoControl.update = function (feat) {
-      this._div.innerHTML = '<h5>Número de casos confirmados por 10k habitantes</h5>' +  (feat ?
-        '<b>' + feat.properties.NOME + '</b><br />' + bairros_info.get(feat.properties.NOME) + ' casos por 10k hab'
-        : 'Passe o mouse sobre um bairro');
-    }
-    infoControl.addTo(mapInstance)
-
+        for (let i = 0; i < n; i++) {
+          let c = blues[i]
+            let fromto = colorScale.invertExtent(c);
+          labels.push(
+            '<i style="background:' + blues[i] + '"></i> ' +
+            d3.format("d")(fromto[0]) + (d3.format("d")(fromto[1]) ? '&ndash;' + d3.format("d")(fromto[1]) : '+'));
+        }
     
-    function style(feature) {
-      return {
-        weight: 1,
-        opacity: 1,
-        color: 'white',
-        dashArray: '3',
-        fillOpacity: 0.9,
-        fillColor: colorScale(bairros_info.get(feature.properties.NOME))
-      };
-    }
-
-    function highlightFeature(e) {
-      var layer = e.target;
-
-      layer.setStyle({
-          weight: 5,
-          color: '#666',
-          dashArray: '',
-          fillOpacity: 0.7
-      });
-
-      if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
-          layer.bringToFront();
+        div.innerHTML = labels.join('<br>')
+        return div
       }
-      infoControl.update(layer.feature);
-    }
+      legendControl.addTo(mapInstance)
 
-    function resetHighlight(e) {
-      if (clicked[0] != e.target.feature.properties.NOME) {
-        geojson.resetStyle(e.target);
+      let infoControl = L.control()
+      infoControl.onAdd = function (map) {
+        this._div = L.DomUtil.create('div', 'info');
+        this.update();
+        return this._div;
       }
-      infoControl.update();
-    }
+      infoControl.update = function (feat) {
+        this._div.innerHTML = '<h5>Número de casos confirmados por 10k habitantes</h5>' +  (feat ?
+          '<b>' + feat.properties.NOME + '</b><br />' + bairros_info.get(feat.properties.NOME) + ' casos por 10k hab'
+          : 'Passe o mouse sobre um bairro');
+      }
+      infoControl.addTo(mapInstance)
 
-    clicked =  ['']
-    antigo = ''
-    function zoomToFeature(e) {
-      mapInstance.fitBounds(e.target.getBounds());
-      nome_passado = ''
-      while(clicked.length > 0) {
-        nome_passado = clicked.pop();
+      
+      function style(feature) {
+        return {
+          weight: 1,
+          opacity: 1,
+          color: 'white',
+          dashArray: '3',
+          fillOpacity: 0.9,
+          fillColor: colorScale(bairros_info.get(feature.properties.NOME))
+        };
       }
-      if (nome_passado != e.target.feature.properties.NOME) {
-        geojson.resetStyle(antigo.target);
-        clicked.push(e.target.feature.properties.NOME)
+
+      function highlightFeature(e) {
         var layer = e.target;
 
         layer.setStyle({
-          fillColor: 'yellow'
+            weight: 5,
+            color: '#666',
+            dashArray: '',
+            fillOpacity: 0.7
         });
 
-        antigo = e
+        if (!L.Browser.ie && !L.Browser.opera && !L.Browser.edge) {
+            layer.bringToFront();
+        }
+        infoControl.update(layer.feature);
       }
-      else {
-        clicked.push('')
-        geojson.resetStyle(e.target);
+
+      function resetHighlight(e) {
+        if (clicked[0] != e.target.feature.properties.NOME) {
+          geojson.resetStyle(e.target);
+        }
+        infoControl.update();
       }
-      updateFilters()
-    }
 
-    function onEachFeature(feature, layer) {
-      layer.on({
-        mouseover: highlightFeature,
-        mouseout: resetHighlight,
-        click: zoomToFeature
-      });
-    }
+      clicked =  ['']
+      antigo = ''
+      function zoomToFeature(e) {
+        mapInstance.fitBounds(e.target.getBounds());
+        nome_passado = ''
+        while(clicked.length > 0) {
+          nome_passado = clicked.pop();
+        }
+        if (nome_passado != e.target.feature.properties.NOME) {
+          geojson.resetStyle(antigo.target);
+          clicked.push(e.target.feature.properties.NOME)
+          var layer = e.target;
 
-    geojson = L.geoJson(bairros, {
-      style: style,
-      onEachFeature: onEachFeature
-    }).addTo(mapInstance);
-  
-    return geojson
-  }
+          layer.setStyle({
+            fillColor: 'yellow'
+          });
+
+          antigo = e
+        }
+        else {
+          clicked.push('')
+          geojson.resetStyle(e.target);
+        }
+        updateFilters()
+      }
+
+      function onEachFeature(feature, layer) {
+        layer.on({
+          mouseover: highlightFeature,
+          mouseout: resetHighlight,
+          click: zoomToFeature
+        });
+      }
+
+      geojson = L.geoJson(bairros, {
+        style: style,
+        onEachFeature: onEachFeature
+      }).addTo(mapInstance);
+    
+      return geojson
+    }
+    buildMap();
+  }  
+
 
   //Calendário
   cases_by_day_calendar = dateDim.group().reduceSum(d => d['casos confirmados']).top(Infinity)
@@ -458,6 +466,5 @@
 
 
   buildSimpleGrapics()
-  buildMap()
   buildCalendar() 
 })()

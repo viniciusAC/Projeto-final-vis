@@ -13,6 +13,16 @@
   <title>Trab Vis</title>
 </head>
 <body>
+
+  <script src="https://unpkg.com/topojson@3"></script>
+  <script src="https://d3js.org/d3.v5.min.js"></script>
+  <script src="https://d3js.org/d3-array.v2.min.js"></script>
+  <script src="https://unpkg.com/dc@4.2.7/dist/dc.js"></script>
+  <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
+  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
+  <script src="scripts/index.js"></script>
+
   <main role="main">
     <div class="row title-project">
       <h1> COVID-19 Fortaleza</h1>
@@ -20,9 +30,14 @@
     </div>
     
     <div class = "container">
-      <div class="row my-5">
+      <div class="row my-5">  
         <h2> Filtros </h2>
         <small> Selecione um periodo abaixo para filtrar os gráficos de casos, óbitos e o de mapa. Para remover o filtro, basta dar um duplo clique no filtro dentro do espaço selecionado ou um clique fora do espaço selecionado.</small>
+        <div class='botao'>
+          <a href="javascript:periodBarChart.filterAll();dc.redrawAll();">
+            <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+          </a>
+        </div>
         <div id='filter-period-graph'></div>
         <small> <br/> <b> Outros filtros possíveis: </b> <br/>
         - Selecionar setores no gráfico de setor: irá filtrar os gráficos de casos, óbitos e o de mapa. Você pode selecionar mais de um setor. <br/>
@@ -46,11 +61,21 @@
         <div class="col-4">
           <h4> Percentual de casos por faixa etaria </h4>
           <small> Selecione as faixas etárias desejadas abaixo para aplicação do filtro. <br/> </small>
+          <div class='botao'>
+            <a href="javascript:pieChart.filterAll();dc.redrawAll();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='cases-age-group-chart'></div>
         </div>
         <div class="col-8">
           <h4> Bairros com maior número de casos </h4>
           <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
+          <div class='botao'>
+            <a href="javascript:barChart.filterAll();dc.redrawAll();update_bar_chart();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='cases-neighborhood-chart'>
           </div>
         </div>
@@ -70,11 +95,21 @@
         <div class="col-4">
           <h3> Percentual de Óbitos por Faixa Etária </h3>
           <small> Selecione as faixas etárias desejadas abaixo para aplicação do filtro. <br/> </small>
+          <div class='botao'>
+            <a href="javascript:pieChart2.filterAll();dc.redrawAll();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='deaths-age-group-chart'></div>
         </div>
         <div class="col-8">
           <h3> Bairros com maior número de Óbitos </h3>
           <small> Selecione os bairros desejados para filtrar os demais gráficos. Esse filtro não afeta o mapa. </small>
+          <div class='botao'>
+            <a href="javascript:barChart2.filterAll();dc.redrawAll();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='death-neighborhood-chart'></div>
         </div>
       </div>
@@ -104,14 +139,5 @@
       <small><b> © Iury Lima Rosal, Luís Gustavo de Castro, Vinícius Almeida de Castro | 2021 | Universidade Federal do Ceará (UFC)</b></small>
     </div>
   </main>
-
-  <script src="https://unpkg.com/topojson@3"></script>
-  <script src="https://d3js.org/d3.v5.min.js"></script>
-  <script src="https://d3js.org/d3-array.v2.min.js"></script>
-  <script src="https://unpkg.com/dc@4.2.7/dist/dc.js"></script>
-  <script src="https://unpkg.com/crossfilter2@1.5.4/crossfilter.min.js"></script>
-  <script src="https://unpkg.com/leaflet@1.7.1/dist/leaflet.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.1.0/dist/js/bootstrap.bundle.min.js" integrity="sha384-U1DAWAznBHeqEIlVSCgzq+c9gqGAJn5c/t99JyeKa9xxaYpSvHU5awsuZVVFIhvj" crossorigin="anonymous"></script>
-  <script src="scripts/index.js"></script>
 </body>
 </html>

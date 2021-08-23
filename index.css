@@ -83,6 +83,11 @@ body {
   color: #3C096C;
 }
 
+.botao {
+  padding-top: 10px;
+  padding-bottom: 10px;
+}
+
 #cases-age-group-chart{
   padding-top: 10px;
   padding-bottom: 10px; 
