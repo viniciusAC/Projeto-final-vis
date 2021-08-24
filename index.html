@@ -45,7 +45,14 @@
         - Selecionar um bairro no mapa: irá filtrar os gráficos de casos e de óbitos. Você pode selecionar um único bairro.
         <br/>
         <i> Esses filtros podem ser combinados entre si e com o filtro de período, com exceção do mapa. O mapa só é combinável com outros filtros caso ele seja selecionado por último na sequência de filtros. Ao selecionar qualquer outro filtro após a seleção no mapa, o filtro do mapa é removido. Para retirar os demais filtros selecionados, basta clicar novamente no que foi selecionado ou utilizar o botão de "Limpar este filtro", caso disponível. </i> 
-      </small>
+        <br/>
+        Utilize o botão abaixo para limpar todos os filtros ativos!
+        </small>
+        <div class='botao-reset-all'>
+          <a href="javascript:reset_all();">
+            <button type="button" class="btn btn-outline-danger">Limpar todos os Filtros</button>
+          </a>
+        </div>
       </div>
     </div>
 
@@ -71,7 +78,12 @@
         </div>
         <div class="col-8">
           <h4> Bairros com maior número de casos </h4>
-          <small> Selecione os bairros desejados para filtrar os demais gráficos. Para retirar o filtro, basta clicar sob as barras selecionadas. </small>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos. </small>
+          <div class='botao'>
+            <a href="javascript:barChart2.filterAll();dc.redrawAll();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='cases-neighborhood-chart'>
           </div>
         </div>
@@ -92,7 +104,7 @@
           <h3> Percentual de Óbitos por Faixa Etária </h3>
           <small> Selecione as faixas etárias desejadas abaixo para aplicação do filtro. <br/> </small>
           <div class='botao'>
-            <a href="javascript:pieChart2.filterAll();dc.redrawAll();">
+            <a href="javascript:pieChart.filterAll();dc.redrawAll();">
               <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
             </a>
           </div>
@@ -100,7 +112,12 @@
         </div>
         <div class="col-8">
           <h3> Bairros com maior número de Óbitos </h3>
-          <small> Selecione os bairros desejados para filtrar os demais gráficos. Para retirar o filtro, basta clicar sob as barras selecionadas. </small>
+          <small> Selecione os bairros desejados para filtrar os demais gráficos.</small>
+          <div class='botao'>
+            <a href="javascript:barChart2.filterAll();dc.redrawAll();">
+              <button type="button" class="btn btn-outline-primary">Limpar este Filtro</button>
+            </a>
+          </div>
           <div id='death-neighborhood-chart'></div>
         </div>
       </div>

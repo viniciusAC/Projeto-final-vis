@@ -88,6 +88,12 @@ body {
   padding-bottom: 10px;
 }
 
+.botao-reset-all {
+  padding-top: 10px;
+  padding-bottom: 10px;
+  text-align: center;
+}
+
 #cases-age-group-chart{
   padding-top: 10px;
   padding-bottom: 10px; 

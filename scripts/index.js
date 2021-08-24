@@ -159,7 +159,7 @@
     //Gráfico de Barras de Bairros com maior número de mortes
     let death_by_bairro_top = getTops(death_by_bairro)
     let x_bairro_scale = d3.scaleOrdinal()
-    barChart.width(500)
+    barChart.width(700)
       .height(400)
       .dimension(bairroDim)
       .gap(30)
@@ -181,7 +181,7 @@
     //Gráfico de Barras de Bairros com maior número de casos
     let cases_by_bairro_top = getTops(cases_by_bairro)
     let x_bairro_scale2 = d3.scaleOrdinal()
-    barChart2.width(500)
+    barChart2.width(700)
       .height(400)
       .dimension(bairroDim2)
       .gap(30)
@@ -389,6 +389,16 @@
     return `${d === 0 ? `M${w * cellSize},0`
         : d === n ? `M${(w + 1) * cellSize},0`
         : `M${(w + 1) * cellSize},0V${d * cellSize}H${w * cellSize}`}V${n * cellSize}`;
+  }
+
+  reset_all = function(){
+    periodBarChart.filterAll();
+    barChart.filterAll();
+    barChart2.filterAll();
+    pieChart2.filterAll();
+    pieChart.filterAll();
+    setar_mapa();
+    dc.redrawAll();
   }
 
   //Gráfico de Calendário 
